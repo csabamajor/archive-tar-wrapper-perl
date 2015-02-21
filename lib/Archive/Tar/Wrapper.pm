@@ -29,6 +29,7 @@ sub new {
         tar_read_options     => '',
         tar_write_options    => '',
         tar_gnu_read_options => [],
+        tar_gnu_write_options => [],
         dirs                 => 0,
         max_cmd_line_args    => 512,
         ramdisk              => undef,
@@ -378,11 +379,13 @@ sub write {
             print FLIST "$_\n";
         }
         close FLIST;
-        $cmd = [$self->{tar}, "${compr_opt}cf$self->{tar_write_options}", 
-                $tarfile, "-T", $filelist_file];
+        $cmd = [$self->{tar}, "${compr_opt}c$self->{tar_write_options}", 
+                @{$self->{tar_gnu_write_options}},
+                '-f', $tarfile, "-T", $filelist_file];
     } else {
-        $cmd = [$self->{tar}, "${compr_opt}cf$self->{tar_write_options}", 
-                $tarfile, @top_entries];
+        $cmd = [$self->{tar}, "${compr_opt}c$self->{tar_write_options}", 
+                @{$self->{tar_gnu_write_options}},
+                '-f', $tarfile, @top_entries];
     }
 
 
